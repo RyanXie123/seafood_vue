@@ -1,18 +1,25 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="wrapper">
+    <Content />
+    <Cart />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import HelloWorld from "@/components/HelloWorld.vue";
+import Content from "./Content";
+import Cart from "./Cart";
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
-  }
-}
+    Content,
+    Cart,
+  },
+};
 </script>
+<style lang="scss" scoped>
+@import "../styles/varibles.scss";
+.wrapper {
+  padding: 0 0.18rem;
+}
+</style>

@@ -8,6 +8,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/orderConfirmation/:id',
+    name: 'OrderConfirmation',
+    component: () => import(/* webpackChunkName: "orderConfirmation" */ '../views/orderConfirmation/OrderConfirmation')
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting
