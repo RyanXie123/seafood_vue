@@ -74,7 +74,7 @@ const useMakeOrderEffect = (
       items.push({
         product: product.id,
         quantity: product.count,
-        price: product.price * product.count,
+        price: (product.price * product.count).toFixed(2),
       });
     }
 
