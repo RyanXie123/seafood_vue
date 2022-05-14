@@ -22,7 +22,9 @@
     <div class="orders">
       <div class="order" v-for="(item, index) in list" :key="index">
         <!-- {{ item.name }} -->
-        <div class="order__time">下单时间:{{ item.created_at }}</div>
+        <div class="order__time">地址: {{ item.address }}</div>
+        <div class="order__time">电话: {{ item.phone }}</div>
+        <div class="order__time">下单时间: {{ item.created_at }}</div>
         <div v-for="(orderItem, index) in item.items" :key="index">
           <div class="order__item">
             <img class="order__img" :src="orderItem.product.get_thumbnail" />
@@ -124,7 +126,7 @@ export default {
   &__time {
     color: $light-fontColor;
     font-size: 0.08rem;
-    margin-bottom: 0.16rem;
+    margin-bottom: 0.06rem;
   }
   &__price {
     text-align: center;

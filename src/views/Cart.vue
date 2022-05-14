@@ -82,7 +82,8 @@
       <div class="check__btn2">
         <router-link :to="{ path: '/orderList' }"> 历史订单 </router-link>
       </div>
-      <div class="check__btn">
+
+      <div v-if="calculations.total > 0" class="check__btn">
         <router-link :to="{ path: `/orderConfirmation/${shopId}` }">
           去结算
         </router-link>
@@ -359,7 +360,7 @@ export default {
   }
   &__btn2 {
     width: 0.98rem;
-    background-color: #b2b8bc;
+    background-color: #99c9e8;
     text-align: center;
     font-size: 0.14rem;
     a {
