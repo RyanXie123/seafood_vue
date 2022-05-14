@@ -164,7 +164,7 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  top: 0.44rem;
+  top: 0rem;
   bottom: 0.5rem;
 }
 .category {
@@ -193,6 +193,7 @@ export default {
     border-bottom: 0.01rem solid $content-bgColor;
     &__detail {
       overflow: hidden;
+      flex: 1;
     }
     &__img {
       width: 0.68rem;
