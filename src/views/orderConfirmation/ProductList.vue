@@ -9,11 +9,11 @@
             <h4 class="products__item__title">{{ item.name }}</h4>
             <p class="products__item__price">
               <span>
-                <span class="products__item__yen">&yen; </span>
+                <span class="products__item__yen">&euro; </span>
                 {{ item.price }} x {{ item.count }}
               </span>
               <span class="products__item__total">
-                <span class="products__item__yen">&yen; </span>
+                <span class="products__item__yen">&euro; </span>
                 {{ (item.price * item.count).toFixed(2) }}
               </span>
             </p>

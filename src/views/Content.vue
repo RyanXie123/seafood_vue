@@ -15,7 +15,19 @@
     </div>
     <div class="product">
       <div class="product__item" v-for="item in list" :key="item.id">
-        <img class="product__item__img" :src="item.get_thumbnail" />
+        <img
+          v-gallery="item.id"
+          class="product__item__img"
+          :src="item.get_thumbnail"
+          :data-large="item.get_image"
+        />
+        <img
+          v-if="item.get_thumbnail"
+          v-show="false"
+          v-gallery="item.id"
+          class="product__item__img"
+          :src="item.get_thumbnail"
+        />
         <div class="product__item__detail">
           <h4 class="product__item__title">{{ item.name }}</h4>
           <p class="product__item__sales">{{ item.weight_desc }}</p>
@@ -118,6 +130,9 @@ export default {
     const { list, tabs, currentTab, handleTabClick } =
       useCurrentListEffect(shopId);
     const { changeCartItem, cartList, getProductCartCount } = useCartEffect();
+    const previewImage = (url) => {
+      // this.$hevueImgPreview(url);
+    };
     return {
       shopId,
       shopName,
@@ -128,6 +143,7 @@ export default {
       cartList,
       getProductCartCount,
       handleTabClick,
+      previewImage,
     };
   },
 };

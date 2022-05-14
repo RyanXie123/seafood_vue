@@ -1,7 +1,8 @@
 <template>
   <div class="order">
     <div class="order__price">
-      总计 <span class="order__price__num">&yen; {{ calculations.price }}</span>
+      总计
+      <span class="order__price__num">&euro; {{ calculations.price }}</span>
     </div>
     <div class="order__btn" @click="() => handleShowConfirmChange(true)">
       提交订单
