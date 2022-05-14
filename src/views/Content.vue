@@ -14,50 +14,55 @@
       </div>
     </div>
     <div class="product">
-      <div class="product__item" v-for="item in list" :key="item.id">
-        <img
-          v-gallery="item.id"
-          class="product__item__img"
-          :src="item.get_thumbnail"
-          :data-large="item.get_image"
-        />
-        <img
-          v-if="item.get_thumbnail"
-          v-show="false"
-          v-gallery="item.id"
-          class="product__item__img"
-          :src="item.get_thumbnail"
-        />
-        <div class="product__item__detail">
-          <h4 class="product__item__title">{{ item.name }}</h4>
-          <p class="product__item__sales">{{ item.weight_desc }}</p>
-          <p class="product__item__price">
-            <span class="product__item__yen">&euro;</span>{{ item.price }}
-            <span class="product__item__origin">&euro;{{ item.price }}</span>
-          </p>
+      <template v-for="item in list" :key="item.id">
+        <div v-if="item.on_shelf" class="product__item">
+          <img
+            :id="item.id"
+            v-gallery="item.id"
+            class="product__item__img"
+            :src="item.get_thumbnail"
+            :data-large="item.get_image"
+          />
+          <img
+            v-if="item.get_image2"
+            v-show="false"
+            v-gallery="item.id"
+            class="product__item__img"
+            :src="item.get_image2"
+          />
+          <div class="product__item__detail" @click="previewImage(item.id)">
+            <h4 class="product__item__title">
+              {{ item.name }}
+            </h4>
+            <p class="product__item__sales">{{ item.weight_desc }}</p>
+            <p class="product__item__price">
+              <span class="product__item__yen">&euro;</span>{{ item.price }}
+              <!-- <span class="product__item__origin">&euro;{{ item.price }}</span> -->
+            </p>
+          </div>
+          <div class="product__number">
+            <span
+              class="product__number__minus"
+              @click="
+                () => {
+                  changeCartItem(shopId, item.id, item, -1, shopName);
+                }
+              "
+              >-</span
+            >
+            {{ getProductCartCount(shopId, item.id) }}
+            <span
+              class="product__number__plus"
+              @click="
+                () => {
+                  changeCartItem(shopId, item.id, item, 1, shopName);
+                }
+              "
+              >+</span
+            >
+          </div>
         </div>
-        <div class="product__number">
-          <span
-            class="product__number__minus"
-            @click="
-              () => {
-                changeCartItem(shopId, item.id, item, -1, shopName);
-              }
-            "
-            >-</span
-          >
-          {{ getProductCartCount(shopId, item.id) }}
-          <span
-            class="product__number__plus"
-            @click="
-              () => {
-                changeCartItem(shopId, item.id, item, 1, shopName);
-              }
-            "
-            >+</span
-          >
-        </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -130,8 +135,10 @@ export default {
     const { list, tabs, currentTab, handleTabClick } =
       useCurrentListEffect(shopId);
     const { changeCartItem, cartList, getProductCartCount } = useCartEffect();
-    const previewImage = (url) => {
+    const previewImage = (id) => {
       // this.$hevueImgPreview(url);
+      console.log("previewImage" + id);
+      document.getElementById(id).click();
     };
     return {
       shopId,

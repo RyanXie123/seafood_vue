@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <div class="title">
+    <!-- <div class="title">
       <div class="title__text">商品列表</div>
-    </div>
+    </div> -->
     <Content />
     <Cart />
   </div>
