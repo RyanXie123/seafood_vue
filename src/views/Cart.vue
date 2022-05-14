@@ -76,8 +76,11 @@
       </div>
       <div class="check__info">
         总计：<span class="check__info__price"
-          >&yen; {{ calculations.price }}</span
+          >&euro; {{ calculations.price }}</span
         >
+      </div>
+      <div class="check__btn2">
+        <router-link :to="{ path: '/orderList' }"> 历史订单 </router-link>
       </div>
       <div class="check__btn">
         <router-link :to="{ path: `/orderConfirmation/${shopId}` }">
@@ -347,6 +350,16 @@ export default {
   &__btn {
     width: 0.98rem;
     background-color: #0091ff;
+    text-align: center;
+    font-size: 0.14rem;
+    a {
+      color: $bgColor;
+      text-decoration: none;
+    }
+  }
+  &__btn2 {
+    width: 0.98rem;
+    background-color: #b2b8bc;
     text-align: center;
     font-size: 0.14rem;
     a {

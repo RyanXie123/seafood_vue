@@ -1,5 +1,18 @@
 <template>
   <div class="content">
+    <div class="category">
+      <div
+        :class="{
+          category__item: true,
+          'category__item--active': currentTab === tab,
+        }"
+        v-for="tab in tabs"
+        :key="tab"
+        @click="() => handleTabClick(tab)"
+      >
+        {{ tab }}
+      </div>
+    </div>
     <div class="product">
       <div class="product__item" v-for="item in list" :key="item.id">
         <img class="product__item__img" :src="item.get_thumbnail" />
@@ -7,8 +20,8 @@
           <h4 class="product__item__title">{{ item.name }}</h4>
           <p class="product__item__sales">{{ item.weight_desc }}</p>
           <p class="product__item__price">
-            <span class="product__item__yen">&yen;</span>{{ item.price }}
-            <span class="product__item__origin">&yen;{{ item.price }}</span>
+            <span class="product__item__yen">&euro;</span>{{ item.price }}
+            <span class="product__item__origin">&euro;{{ item.price }}</span>
           </p>
         </div>
         <div class="product__number">
@@ -46,19 +59,37 @@ import { useCommonCartEffect } from "../effects/cartEffects";
 
 // 列表内容相关的逻辑
 const useCurrentListEffect = (shopId) => {
-  const content = reactive({ list: [] });
+  const content = reactive({ list: [], tabs: [] });
+  const currentTab = ref("");
+
+  var totalData = [];
   const getContentData = async () => {
-    const result = await get(`/latest-products`);
+    const result = await get(`/category_list`);
     console.log(result);
+    totalData = result;
+
     if (result?.length) {
-      content.list = result;
+      content.list = result[0].products;
+      currentTab.value = result[0].name;
+      for (let tabData of result) {
+        content.tabs.push(tabData.name);
+      }
     }
   };
   watchEffect(() => {
     getContentData();
   });
-  const { list } = toRefs(content);
-  return { list };
+  const handleTabClick = (tab) => {
+    currentTab.value = tab;
+    for (let tabData of totalData) {
+      if (tabData.name == tab) {
+        content.list = tabData.products;
+      }
+    }
+  };
+
+  const { list, tabs } = toRefs(content);
+  return { list, tabs, currentTab, handleTabClick };
 };
 
 // 购物车相关逻辑
@@ -84,15 +115,19 @@ export default {
   setup() {
     const shopId = "1";
     const shopName = "testShop";
-    const { list } = useCurrentListEffect(shopId);
+    const { list, tabs, currentTab, handleTabClick } =
+      useCurrentListEffect(shopId);
     const { changeCartItem, cartList, getProductCartCount } = useCartEffect();
     return {
       shopId,
       shopName,
       list,
+      tabs,
+      currentTab,
       changeCartItem,
       cartList,
       getProductCartCount,
+      handleTabClick,
     };
   },
 };
@@ -106,10 +141,24 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  top: 0rem;
+  top: 0.44rem;
   bottom: 0.5rem;
 }
-
+.category {
+  overflow-y: scroll;
+  height: 100%;
+  width: 0.76rem;
+  background: $search-bgColor;
+  &__item {
+    line-height: 0.4rem;
+    text-align: center;
+    font-size: 0.14rem;
+    color: #333;
+    &--active {
+      background: $bgColor;
+    }
+  }
+}
 .product {
   overflow-y: scroll;
   flex: 1;

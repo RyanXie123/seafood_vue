@@ -3,7 +3,7 @@ import axios from 'axios'
 const debugBase = "http://127.0.0.1:8000";
 const productBase = "https://apidjackets.seafood.fit";
 const instance = axios.create({
-    baseURL: productBase + '/api/v1',
+    baseURL: debugBase + '/api/v1',
     timeout: 10000
 })
 
