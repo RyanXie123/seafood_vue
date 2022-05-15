@@ -12,11 +12,21 @@
       <div class="order" v-for="(item, index) in list" :key="index">
         <!-- {{ item.name }} -->
         <div class="order__time">下单时间:{{ item.created_at }}</div>
-        <div v-for="(orderItem, index) in item.items" :key="index">
+        <div class="order__time">地址:{{ item.address }}</div>
+        <div
+          v-for="(orderItem, index) in item.items"
+          :key="index"
+          @click="handleItemClicked(orderItem.product.id)"
+        >
           <div class="order__item">
-            <img class="order__img" :src="orderItem.product.get_thumbnail" />
+            <img
+              class="order__img"
+              v-gallery="orderItem.product.id"
+              :src="orderItem.product.get_thumbnail"
+              :data-large="orderItem.product.get_image"
+              :id="orderItem.product.id"
+            />
             <div class="order__middle">
-              <div>{{ orderItem.product.name }}</div>
               <div>{{ orderItem.product.name }}</div>
               <div>x{{ orderItem.quantity }}</div>
             </div>
@@ -27,7 +37,7 @@
         </div>
         <div style="display: flex; justify-content: space-between">
           <div style="">订单金额: &euro; {{ item.paid_amount }}</div>
-          <div style="">订单状态: 已下单</div>
+          <div style="">订单状态: {{ item.cn_status }}</div>
         </div>
       </div>
     </div>
@@ -59,12 +69,17 @@ export default {
     const handleBackClick = () => {
       router.back();
     };
+
+    const handleItemClicked = (id) => {
+      document.getElementById(id).click();
+    };
+
     const store = useStore();
     console.log(store.state.addressInfo.phone);
     const { list, has_data } = useOrderListEffect(
       store.state.addressInfo.phone
     );
-    return { handleBackClick, list, has_data };
+    return { handleBackClick, list, has_data, handleItemClicked };
   },
 };
 </script>
@@ -101,7 +116,7 @@ export default {
   }
   &__time {
     color: $light-fontColor;
-    font-size: 0.08rem;
+    font-size: 0.12rem;
     margin-bottom: 0.16rem;
   }
   &__price {

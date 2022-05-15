@@ -3,8 +3,19 @@
     <div class="products__wrapper">
       <div class="products__list">
         <div class="products__title">购物清单</div>
-        <div v-for="item in productList" :key="item.id" class="products__item">
-          <img class="products__item__img" :src="item.get_thumbnail" />
+        <div
+          v-for="item in productList"
+          :key="item.id"
+          class="products__item"
+          @click="handleItemClicked(item.id)"
+        >
+          <img
+            class="products__item__img"
+            :src="item.get_thumbnail"
+            :id="item.id"
+            v-gallery="item.id"
+            :data-large="item.get_image"
+          />
           <div class="products__item__detail">
             <h4 class="products__item__title">{{ item.name }}</h4>
             <p class="products__item__price">
@@ -33,7 +44,10 @@ export default {
     const route = useRoute();
     const shopId = "1";
     const { shopName, productList } = useCommonCartEffect(shopId);
-    return { shopName, productList };
+    const handleItemClicked = (id) => {
+      document.getElementById(id).click();
+    };
+    return { shopName, productList, handleItemClicked };
   },
 };
 </script>

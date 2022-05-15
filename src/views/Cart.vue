@@ -80,7 +80,7 @@
         >
       </div>
       <div class="check__btn2">
-        <router-link :to="{ path: '/orderList' }"> 历史订单 </router-link>
+        <router-link :to="{ path: '/orderList' }"> 我的订单 </router-link>
       </div>
 
       <div v-if="calculations.total > 0" class="check__btn">
@@ -360,7 +360,8 @@ export default {
   }
   &__btn2 {
     width: 0.98rem;
-    background-color: #99c9e8;
+    background-color: #0091ff;
+    border-right: 1px solid lightgray;
     text-align: center;
     font-size: 0.14rem;
     a {
