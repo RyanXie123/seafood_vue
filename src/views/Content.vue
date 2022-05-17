@@ -24,6 +24,11 @@
             :data-large="item.get_image"
           />
           <img
+            v-if="item.stock < item.weight"
+            class="product__item__soldout"
+            src="https://apidjackets.seafood.fit/media/uploads/sold_out.png"
+          />
+          <img
             v-if="item.get_image2"
             v-show="false"
             v-gallery="item.id"
@@ -68,7 +73,7 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs, watchEffect } from "vue";
+import { onUnmounted, reactive, ref, toRefs, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { get } from "../utils/request";
@@ -78,18 +83,30 @@ import { useCommonCartEffect } from "../effects/cartEffects";
 const useCurrentListEffect = (shopId) => {
   const content = reactive({ list: [], tabs: [] });
   const currentTab = ref("");
-
+  let currentTabIndex = 0;
   var totalData = [];
   const getContentData = async () => {
     const result = await get(`/category_list`);
     console.log(result);
     totalData = result;
-
+    checkSoldoutFromCart();
     if (result?.length) {
-      content.list = result[0].products;
-      currentTab.value = result[0].name;
+      content.list = result[currentTabIndex].products;
+      currentTab.value = result[currentTabIndex].name;
+      var tabs = [];
       for (let tabData of result) {
-        content.tabs.push(tabData.name);
+        tabs.push(tabData.name);
+      }
+      content.tabs = tabs;
+    }
+  };
+  const { cleanCartSoldoutProduct } = useCommonCartEffect();
+  const checkSoldoutFromCart = () => {
+    for (let tabData of totalData) {
+      for (let product of tabData.products) {
+        if (product.stock < product.weight) {
+          cleanCartSoldoutProduct("1", product.id);
+        }
       }
     }
   };
@@ -98,6 +115,8 @@ const useCurrentListEffect = (shopId) => {
   });
   const handleTabClick = (tab) => {
     currentTab.value = tab;
+    currentTabIndex = content.tabs.indexOf(tab);
+    console.log("currentTabIndex: " + currentTabIndex);
     for (let tabData of totalData) {
       if (tabData.name == tab) {
         content.list = tabData.products;
@@ -106,7 +125,7 @@ const useCurrentListEffect = (shopId) => {
   };
 
   const { list, tabs } = toRefs(content);
-  return { list, tabs, currentTab, handleTabClick };
+  return { list, tabs, currentTab, handleTabClick, getContentData };
 };
 
 // 购物车相关逻辑
@@ -132,14 +151,27 @@ export default {
   setup() {
     const shopId = "1";
     const shopName = "testShop";
-    const { list, tabs, currentTab, handleTabClick } =
+    const { list, tabs, currentTab, handleTabClick, getContentData } =
       useCurrentListEffect(shopId);
-    const { changeCartItem, cartList, getProductCartCount } = useCartEffect();
+    const {
+      changeCartItem,
+      cartList,
+      getProductCartCount,
+      cleanCartSoldoutProduct,
+    } = useCartEffect();
     const previewImage = (id) => {
       // this.$hevueImgPreview(url);
       console.log("previewImage" + id);
       document.getElementById(id).click();
     };
+
+    const tId = setInterval(() => {
+      getContentData();
+    }, 5000);
+
+    onUnmounted(() => {
+      clearInterval(tId);
+    });
     return {
       shopId,
       shopName,
@@ -199,6 +231,12 @@ export default {
       width: 0.68rem;
       height: 0.68rem;
       margin-right: 0.16rem;
+    }
+    &__soldout {
+      width: 0.5rem;
+      height: 0.5rem;
+      left: 0.09rem;
+      position: absolute;
     }
     &__title {
       margin: 0;

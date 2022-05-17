@@ -87,6 +87,20 @@ export default Vuex.createStore({
       state.cartList[shopId].productList = {}
       setLocalCartList(state)
     },
+    cleanCartSoldoutProduct(state, payload) {
+      const { shopId, productId } = payload
+      let shopInfo = state.cartList[shopId] || {
+        shopName: '', productList: {}
+      }
+      let product = shopInfo.productList[productId];
+      if (product) {
+        product.count = 0;
+        shopInfo.productList[productId] = product;
+        state.cartList[shopId] = shopInfo
+        setLocalCartList(state)
+      }
+
+    },
     setCartItemsChecked(state, payload) {
       const { shopId } = payload
       const products = state.cartList[shopId].productList

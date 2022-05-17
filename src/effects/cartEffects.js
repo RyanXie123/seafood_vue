@@ -9,7 +9,11 @@ export const useCommonCartEffect = (shopId) => {
             shopId, productId, productInfo, num
         })
     }
-
+    const cleanCartSoldoutProduct = (shopId, productId) => {
+        store.commit('cleanCartSoldoutProduct', {
+            shopId, productId
+        })
+    }
     const productList = computed(() => {
         const productList = cartList[shopId]?.productList || {}
         const notEmptyProductList = {}
@@ -46,5 +50,5 @@ export const useCommonCartEffect = (shopId) => {
         return result
     })
 
-    return { cartList, shopName, productList, calculations, changeCartItemInfo }
+    return { cartList, shopName, productList, calculations, changeCartItemInfo, cleanCartSoldoutProduct }
 }

@@ -28,6 +28,7 @@
       <div class="top__receiver__title">手机</div>
       <div class="top__input">
         <input
+          type="tel"
           class="top__input__content"
           placeholder="请输入手机号"
           v-model="phone"
