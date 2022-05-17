@@ -44,6 +44,13 @@
               <span class="product__item__yen">&euro;</span>{{ item.price }}
               <!-- <span class="product__item__origin">&euro;{{ item.price }}</span> -->
             </p>
+            <p
+              v-if="item.stock < 4 && item.stock > 0"
+              class="product__item__price"
+            >
+              紧剩{{ item.stock }}件
+              <!-- <span class="product__item__origin">&euro;{{ item.price }}</span> -->
+            </p>
           </div>
           <div class="product__number">
             <span
@@ -67,6 +74,7 @@
             >
           </div>
         </div>
+        <Toast v-if="show" :message="toastMessage" />
       </template>
     </div>
   </div>
@@ -78,7 +86,7 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { get } from "../utils/request";
 import { useCommonCartEffect } from "../effects/cartEffects";
-
+import Toast, { useToastEffect } from "../components/Toast";
 // 列表内容相关的逻辑
 const useCurrentListEffect = (shopId) => {
   const content = reactive({ list: [], tabs: [] });
@@ -129,13 +137,25 @@ const useCurrentListEffect = (shopId) => {
 };
 
 // 购物车相关逻辑
-const useCartEffect = () => {
+const useCartEffect = (showToast) => {
   const store = useStore();
   const { cartList, changeCartItemInfo } = useCommonCartEffect();
   const changeShopName = (shopId, shopName) => {
     store.commit("changeShopName", { shopId, shopName });
   };
   const changeCartItem = (shopId, productId, item, num, shopName) => {
+    console.log(item.stock);
+    const cartcount = getProductCartCount(shopId, productId);
+    console.log(cartcount);
+    if (item.stock == 0) {
+      showToast("该商品已售磬");
+      return;
+    }
+    if (cartcount + num > item.stock) {
+      showToast("该商品库存不足");
+      return;
+    }
+
     changeCartItemInfo(shopId, productId, item, num);
     changeShopName(shopId, shopName);
   };
@@ -148,7 +168,10 @@ const useCartEffect = () => {
 export default {
   name: "Content",
   props: [],
+  components: { Toast },
   setup() {
+    const { show, toastMessage, showToast } = useToastEffect();
+
     const shopId = "1";
     const shopName = "testShop";
     const { list, tabs, currentTab, handleTabClick, getContentData } =
@@ -158,7 +181,7 @@ export default {
       cartList,
       getProductCartCount,
       cleanCartSoldoutProduct,
-    } = useCartEffect();
+    } = useCartEffect(showToast);
     const previewImage = (id) => {
       // this.$hevueImgPreview(url);
       console.log("previewImage" + id);
@@ -183,6 +206,8 @@ export default {
       getProductCartCount,
       handleTabClick,
       previewImage,
+      show,
+      toastMessage,
     };
   },
 };
@@ -228,14 +253,14 @@ export default {
       flex: 1;
     }
     &__img {
-      width: 0.68rem;
-      height: 0.68rem;
+      width: 0.8rem;
+      height: 0.8rem;
       margin-right: 0.16rem;
     }
     &__soldout {
-      width: 0.5rem;
-      height: 0.5rem;
-      left: 0.09rem;
+      width: 0.7rem;
+      height: 0.7rem;
+      left: 0.05rem;
       position: absolute;
     }
     &__title {
@@ -269,7 +294,7 @@ export default {
     .product__number {
       position: absolute;
       right: 0;
-      bottom: 0.12rem;
+      bottom: 0.2rem;
       &__minus,
       &__plus {
         display: inline-block;

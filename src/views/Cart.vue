@@ -314,7 +314,7 @@ export default {
   line-height: 0.49rem;
   &__icon {
     position: relative;
-    width: 0.84rem;
+    width: 0.6rem;
     &__img {
       display: block;
       margin: 0.12rem auto;
@@ -323,7 +323,7 @@ export default {
     }
     &__tag {
       position: absolute;
-      left: 0.46rem;
+      left: 0.35rem;
       top: 0.04rem;
       padding: 0 0.04rem;
       min-width: 0.2rem;
