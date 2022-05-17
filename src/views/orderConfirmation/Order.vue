@@ -256,7 +256,7 @@ export default {
         color: $btn-bgColor;
       }
       &--last {
-        margin-left: 0.15rem;
+        margin-left: 0rem;
         box-sizing: border-box;
         width: 1rem;
         background: $btn-bgColor;
