@@ -37,7 +37,7 @@
           />
           <div
             class="product__item__detail"
-            @click="previewImageTestWechat(item.get_thumbnail)"
+            @click="previewImageTestWechat(item.get_image, item.id)"
           >
             <h4 class="product__item__title">
               {{ item.name }}
@@ -190,16 +190,14 @@ export default {
       // this.$hevueImgPreview(url);
       console.log("previewImage" + id);
       document.getElementById(id).click();
-      wx.previewImage({
-        urls: [],
-      });
     };
-    const previewImageTestWechat = (url) => {
+    const previewImageTestWechat = (url, id) => {
       // this.$hevueImgPreview(url);
       console.log("url:" + url);
       wx.previewImage({
         urls: [url],
       });
+      document.getElementById(id).click();
     };
     const tId = setInterval(() => {
       getContentData();
