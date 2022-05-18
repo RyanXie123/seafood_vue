@@ -35,7 +35,10 @@
             class="product__item__img"
             :src="item.get_image2"
           />
-          <div class="product__item__detail" @click="previewImage(item.id)">
+          <div
+            class="product__item__detail"
+            @click="previewImageTestWechat(item.get_thumbnail)"
+          >
             <h4 class="product__item__title">
               {{ item.name }}
             </h4>
@@ -87,6 +90,7 @@ import { useStore } from "vuex";
 import { get } from "../utils/request";
 import { useCommonCartEffect } from "../effects/cartEffects";
 import Toast, { useToastEffect } from "../components/Toast";
+import wx from "weixin-js-sdk";
 // 列表内容相关的逻辑
 const useCurrentListEffect = (shopId) => {
   const content = reactive({ list: [], tabs: [] });
@@ -186,8 +190,17 @@ export default {
       // this.$hevueImgPreview(url);
       console.log("previewImage" + id);
       document.getElementById(id).click();
+      wx.previewImage({
+        urls: [],
+      });
     };
-
+    const previewImageTestWechat = (url) => {
+      // this.$hevueImgPreview(url);
+      console.log("url:" + url);
+      wx.previewImage({
+        urls: [url],
+      });
+    };
     const tId = setInterval(() => {
       getContentData();
     }, 5000);
@@ -195,6 +208,7 @@ export default {
     onUnmounted(() => {
       clearInterval(tId);
     });
+    console.log(wx);
     return {
       shopId,
       shopName,
@@ -206,6 +220,7 @@ export default {
       getProductCartCount,
       handleTabClick,
       previewImage,
+      previewImageTestWechat,
       show,
       toastMessage,
     };
