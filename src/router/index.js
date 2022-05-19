@@ -5,7 +5,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      title: '海鲜预定'
+    }
   },
   {
     path: '/orderConfirmation/:id',

@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: "App",
+  name: "海鲜",
 };
 </script>

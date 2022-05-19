@@ -1,4 +1,8 @@
 <template>
+  <div class="position">
+    <span class="iconfont position__icon">&#xe6c5;</span>
+    {{ query.location_str }}
+  </div>
   <div class="content">
     <div class="category">
       <div
@@ -84,13 +88,22 @@
 </template>
 
 <script>
-import { onUnmounted, reactive, ref, toRefs, watchEffect } from "vue";
+import {
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRefs,
+  watchEffect,
+} from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { get } from "../utils/request";
 import { useCommonCartEffect } from "../effects/cartEffects";
 import Toast, { useToastEffect } from "../components/Toast";
 import wx from "weixin-js-sdk";
+import VConsole from "vconsole";
+const vConsole = new VConsole();
 // 列表内容相关的逻辑
 const useCurrentListEffect = (shopId) => {
   const content = reactive({ list: [], tabs: [] });
@@ -112,6 +125,7 @@ const useCurrentListEffect = (shopId) => {
       content.tabs = tabs;
     }
   };
+
   const { cleanCartSoldoutProduct } = useCommonCartEffect();
   const checkSoldoutFromCart = () => {
     for (let tabData of totalData) {
@@ -192,21 +206,30 @@ export default {
       document.getElementById(id).click();
     };
     const previewImageTestWechat = (url, id) => {
-      // this.$hevueImgPreview(url);
-      console.log("url:" + url);
       wx.previewImage({
         urls: [url],
       });
-      document.getElementById(id).click();
+
+      // document.getElementById(id).click();
     };
     const tId = setInterval(() => {
-      getContentData();
+      // getContentData();
     }, 5000);
 
     onUnmounted(() => {
       clearInterval(tId);
     });
-    console.log(wx);
+    onMounted(() => {
+      console.log("onMounted");
+      wx.miniProgram.getEnv(function (res) {
+        console.log("xx");
+        console.log(res.miniprogram); // true
+      });
+    });
+    // console.log(wx);
+    const route = useRoute();
+    console.log(route.query);
+    const query = route.query;
     return {
       shopId,
       shopName,
@@ -221,6 +244,7 @@ export default {
       previewImageTestWechat,
       show,
       toastMessage,
+      query,
     };
   },
 };
@@ -229,12 +253,31 @@ export default {
 <style lang="scss" scoped>
 @import "../styles/varibles.scss";
 @import "../styles/mixins.scss";
+.position {
+  position: relative;
+  // padding: 0.16rem 0.24rem 0.16rem 0;
+  line-height: 0.2rem;
+  font-size: 0.12rem;
+  @include ellipsis;
+  .position__icon {
+    position: relative;
+    top: 0.01rem;
+    font-size: 0.2rem;
+  }
+  .position_notice {
+    position: absolute;
+    right: 0;
+    top: 0.17rem;
+    font-size: 0.2rem;
+  }
+  color: $content-fontcolor;
+}
 .content {
   display: flex;
   position: absolute;
   left: 0;
   right: 0;
-  top: 0rem;
+  top: 0.22rem;
   bottom: 0.5rem;
 }
 .category {

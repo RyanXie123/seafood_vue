@@ -83,21 +83,24 @@
         <router-link :to="{ path: '/orderList' }"> 我的订单 </router-link>
       </div>
 
-      <div v-if="calculations.total > 0" class="check__btn">
-        <router-link :to="{ path: `/orderConfirmation/${shopId}` }">
-          去结算
-        </router-link>
+      <div
+        v-if="calculations.total > 0"
+        class="check__btn"
+        @click="handleGotoConfirmOrder"
+      >
+        去结算
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useCommonCartEffect } from "../effects/cartEffects";
-
+import { get } from "../utils/request";
+import wx from "weixin-js-sdk";
 // 获取购物车信息逻辑
 const useCartEffect = (shopId) => {
   const store = useStore();
@@ -161,7 +164,6 @@ const toggleCartEffect = () => {
 export default {
   name: "Cart",
   setup() {
-    const route = useRoute();
     const shopId = "1";
     const {
       calculations,
@@ -172,6 +174,43 @@ export default {
       setCartItemsChecked,
     } = useCartEffect(shopId);
     const { showCart, handleCartShowChange } = toggleCartEffect();
+
+    let day = 0;
+    let hour = 0;
+    onMounted(async () => {
+      const delivery_data = await get(`/delivery`);
+      console.log(delivery_data);
+      day = delivery_data.day;
+      hour = delivery_data.hour;
+    });
+
+    const nowDate = new Date();
+    const nowDay = nowDate.getDay();
+    const nowHours = nowDate.getHours();
+
+    const canOrderOutVenice = nowDay == day && nowHours < hour;
+    const all_days = ["天", "一", "二", "三", "四", "五", "六"];
+    const route = useRoute();
+    console.log(route.query);
+    const { is_venice, location_str } = route.query;
+    const router = useRouter();
+
+    const in_italy =
+      location_str.indexOf("意大利") != -1 ||
+      location_str.toLowerCase().indexOf("italy") != -1;
+    const handleGotoConfirmOrder = () => {
+      console.log(typeof is_venice);
+      if (is_venice === "true" || canOrderOutVenice) {
+        router.push({
+          path: `/orderConfirmation/${shopId}`,
+        });
+      } else if (in_italy) {
+        alert(`威尼斯岛外用户暂时不支持下单, 仅支持每周${all_days[day]}下单`);
+      } else {
+        alert(`威尼斯岛外用户暂时不支持下单`);
+      }
+    };
+
     return {
       calculations,
       shopId,
@@ -182,6 +221,7 @@ export default {
       setCartItemsChecked,
       showCart,
       handleCartShowChange,
+      handleGotoConfirmOrder,
     };
   },
 };
@@ -357,6 +397,7 @@ export default {
       color: $bgColor;
       text-decoration: none;
     }
+    color: $bgColor;
   }
   &__btn2 {
     width: 0.98rem;
