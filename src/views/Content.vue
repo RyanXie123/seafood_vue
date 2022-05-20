@@ -102,8 +102,8 @@ import { get } from "../utils/request";
 import { useCommonCartEffect } from "../effects/cartEffects";
 import Toast, { useToastEffect } from "../components/Toast";
 import wx from "weixin-js-sdk";
-import VConsole from "vconsole";
-const vConsole = new VConsole();
+// import VConsole from "vconsole";
+// const vConsole = new VConsole();
 // 列表内容相关的逻辑
 const useCurrentListEffect = (shopId) => {
   document.title = "海鲜预定";
