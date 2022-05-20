@@ -214,7 +214,7 @@ export default {
       // document.getElementById(id).click();
     };
     const tId = setInterval(() => {
-      // getContentData();
+      getContentData();
     }, 5000);
 
     onUnmounted(() => {
