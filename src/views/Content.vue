@@ -106,7 +106,7 @@ import wx from "weixin-js-sdk";
 // const vConsole = new VConsole();
 // 列表内容相关的逻辑
 const useCurrentListEffect = (shopId) => {
-  document.title = "海鲜预定";
+  document.title = "海鲜预订";
   const content = reactive({ list: [], tabs: [] });
   const currentTab = ref("");
   let currentTabIndex = 0;
