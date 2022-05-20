@@ -114,8 +114,11 @@ const useShowMaskEffect = (showToast) => {
       showToast("请输入地址");
       return;
     }
-    if (store.state.addressInfo.name === "") {
-      showToast("请输入手机号");
+    if (
+      store.state.addressInfo.phone === "" ||
+      store.state.addressInfo.phone.length < 10
+    ) {
+      showToast("请输入正确的手机号");
       return;
     }
     showConfirm.value = status;

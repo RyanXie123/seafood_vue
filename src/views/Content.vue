@@ -55,7 +55,7 @@
               v-if="item.stock < 4 && item.stock > 0"
               class="product__item__price"
             >
-              紧剩{{ item.stock }}件
+              仅剩{{ item.stock }}件
               <!-- <span class="product__item__origin">&euro;{{ item.price }}</span> -->
             </p>
           </div>
@@ -102,10 +102,11 @@ import { get } from "../utils/request";
 import { useCommonCartEffect } from "../effects/cartEffects";
 import Toast, { useToastEffect } from "../components/Toast";
 import wx from "weixin-js-sdk";
-// import VConsole from "vconsole";
-// const vConsole = new VConsole();
+import VConsole from "vconsole";
+const vConsole = new VConsole();
 // 列表内容相关的逻辑
 const useCurrentListEffect = (shopId) => {
+  document.title = "海鲜预定";
   const content = reactive({ list: [], tabs: [] });
   const currentTab = ref("");
   let currentTabIndex = 0;
@@ -221,10 +222,6 @@ export default {
     });
     onMounted(() => {
       console.log("onMounted");
-      wx.miniProgram.getEnv(function (res) {
-        console.log("xx");
-        console.log(res.miniprogram); // true
-      });
     });
     // console.log(wx);
     const route = useRoute();

@@ -7,7 +7,7 @@
       确认订单
     </div>
     <div class="top__receiver">
-      <div class="top__receiver__title">收货人姓名</div>
+      <div class="top__receiver__title">收货人姓名:</div>
       <div class="top__input">
         <input
           class="top__input__content"
@@ -16,7 +16,7 @@
           @blur="handleInputBlur"
         />
       </div>
-      <div class="top__receiver__title">地址</div>
+      <div class="top__receiver__title">地址:</div>
       <div class="top__input">
         <input
           class="top__input__content"
@@ -25,7 +25,7 @@
           @blur="handleInputBlur"
         />
       </div>
-      <div class="top__receiver__title">手机</div>
+      <div class="top__receiver__title">手机:</div>
       <div class="top__input">
         <input
           type="tel"
@@ -98,13 +98,13 @@ export default {
   &__input {
     height: 0.32rem;
     margin: -0.1rem 0.1rem 0.06rem 0.1rem;
-    padding: 0 0.16rem;
+    padding: 0 0.1rem;
     background: #f9f9f9;
     border: 0.01rem solid rgba(0, 0, 0, 0.1);
     border-radius: 0.06rem;
     border-radius: 0.06rem;
     &__content {
-      margin-top: 0.06rem;
+      margin-top: 0.03rem;
       line-height: 0.22rem;
       border: none;
       outline: none;

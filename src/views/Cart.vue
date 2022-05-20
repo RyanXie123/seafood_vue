@@ -194,22 +194,33 @@ export default {
     console.log(route.query);
     const { is_venice, location_str } = route.query;
     const router = useRouter();
-
-    const in_italy =
-      location_str.indexOf("意大利") != -1 ||
-      location_str.toLowerCase().indexOf("italy") != -1;
-    const handleGotoConfirmOrder = () => {
-      console.log(typeof is_venice);
-      if (is_venice === "true" || canOrderOutVenice) {
-        router.push({
-          path: `/orderConfirmation/${shopId}`,
-        });
-      } else if (in_italy) {
-        alert(`威尼斯岛外用户暂时不支持下单, 仅支持每周${all_days[day]}下单`);
-      } else {
-        alert(`威尼斯岛外用户暂时不支持下单`);
-      }
+    console.log(is_venice);
+    console.log("location_str:" + location_str);
+    let handleGotoConfirmOrder = () => {
+      alert("亲，请开启小程序的位置权限");
+      // router.push({
+      //   path: `/orderConfirmation/${shopId}`,
+      // });
     };
+    if (is_venice && location_str) {
+      const in_italy =
+        location_str.indexOf("意大利") != -1 ||
+        location_str.toLowerCase().indexOf("italy") != -1;
+      handleGotoConfirmOrder = () => {
+        if (is_venice === "true" || canOrderOutVenice) {
+          router.push({
+            path: `/orderConfirmation/${shopId}`,
+          });
+        } else if (in_italy) {
+          alert(`威尼斯岛外用户暂时不支持下单, 仅支持每周${all_days[day]}下单`);
+        } else {
+          alert(`威尼斯岛外用户暂时不支持下单`);
+          // router.push({
+          //   path: `/orderConfirmation/${shopId}`,
+          // });
+        }
+      };
+    }
 
     return {
       calculations,
